@@ -26,6 +26,10 @@ Install [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dh
 Click this [link](https://github.com/Jeffrey0117/TM-lurlDownloader/raw/main/lurlDownloader.user.js) to install Userscript.<br>
 點此下載。<br>
 
+## Tutorial
+
+[【腳本教學】Javascript手寫工具，破解lurl的密碼](https://jeffby8.medium.com/%E8%85%B3%E6%9C%AC%E6%95%99%E5%AD%B8-javascript%E6%89%8B%E5%AF%AB%E5%B7%A5%E5%85%B7-%E7%A0%B4%E8%A7%A3lurl%E7%9A%84%E5%AF%86%E7%A2%BC-3d45b85585c5)
+
 ## 🚀 About Me
 I'm a front-end developer.<br>
 前端工程師。
