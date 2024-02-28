@@ -1,12 +1,5 @@
 # TM-lurlDownloader
-
 這是一個幫助你使用狄卡西斯版，受歡迎的影音圖網 lurl 的小工具。<br>
-
-## 🚀 About Me
-
-I'm a front-end developer.<br>
-前端工程師。
-
 ## Features
 
 1. 密碼破解-自動套入當天上傳日期
@@ -32,6 +25,10 @@ Install [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dh
 安裝油猴套件。<br><br>
 Click this [link](https://github.com/Jeffrey0117/TM-lurlDownloader/raw/main/lurlDownloader.user.js) to install Userscript.<br>
 點此下載。<br>
+
+## 🚀 About Me
+I'm a front-end developer.<br>
+前端工程師。
 
 ## Authors
 
