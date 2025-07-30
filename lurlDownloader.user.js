@@ -1,18 +1,33 @@
 // ==UserScript==
-// @license MIT
-// @name         暴力破解lurl密碼(使用日期)
+// @name         2025暴力破解lurl密碼|自動帶入日期|可下載影片|下載圖片🚀
 // @namespace    http://tampermonkey.net/
-// @version      1.45
+// @version      2.0
 // @description  try to take over the world!
 // @author       You
 // @match        https://lurl.cc/*
 // @match        https://www.dcard.tw/f/sex/*
 // @match        https://www.dcard.tw/f/sex
+// @license MIT
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=lurl.cc
 // @grant        none
 // ==/UserScript==
  
 /*
+2025/07/29
+很久沒使用，也很久沒玩腳本了！最近來更新一下，修正一下bug！
+查看了一下是lurl的邏輯改了，但也沒有相去多遠，所以帶入當天日期失效、圖片右鍵下載失效。
+花了十幾分鐘修改一下，鎖右鍵就鎖吧無所謂。
+ 
+現在已經修復完畢，可以自動帶入"上傳日期"然後圖片下面會有個下載按鈕，點下去會是圖片位置。(自己右鍵存檔)
+ 
+ 
+未來考慮更新:
+目前暫時尚未考慮一次多張圖片的狀況。
+可以加入dcard隱藏sex版藍頭文章。
+ 
+好用的話點一個好評，現在是社會工廠的一個小螺絲釘，一點點的鼓勵都是很棒的支持 ( ੭ ˙ᗜ˙ )੭ ٩꒰｡
+ 
+==============下面是舊的更新日誌==========================
 1.  密碼破解-自動套入當天上傳日期
 2.  影片下載功能-一鍵下載
 3.  預設影片名稱-若是從D卡點擊連結，會以文章標題當作檔案名稱
@@ -28,51 +43,38 @@
  
  
 function PictureSolve(){
-// 找到父元素
-const parentElement = document.querySelector("#canvas_div_lurl").parentElement;
+// 第一步：取得 preload image 的連結
+const preloadImageLink = document.querySelector('link[rel="preload"][as="image"]');
  
-if (parentElement) {
-    // 找到父元素中的所有 <script> 元素
-    const scriptElements = parentElement.querySelectorAll("script");
+if (preloadImageLink) {
+  const imageUrl = preloadImageLink.href;
  
-    // 確保至少存在兩個 <script> 元素
-    if (scriptElements.length >= 2) {
-        // 選擇父元素中的第二個 <script> 元素
-        const secondScriptElement = scriptElements[1];
+  // 第二步：創建 <a download> 元素，包在 <button> 裡
+  const a = document.createElement('a');
+  a.href = imageUrl;
+  a.download = 'downloaded-image.jpg'; // 你可以自訂檔名
+  a.style.textDecoration = 'none'; // 移除連結樣式
  
-        // 使用正則表達式提取圖像的 URL
-        const scriptText = secondScriptElement.innerHTML;
-        const regex = /canvas_img\(['"](https:\/\/[^'"]+)['"]/;
-        const match = scriptText.match(regex);
+  const button = document.createElement('button');
+  button.textContent = '下載圖片';
+  button.className = 'btn btn-primary'; // 加上 Bootstrap 樣式（如有使用）
  
-        if (match) {
-            const imageURL = match[1];
+  a.appendChild(button);
  
-                // 刪除 <canvas> 元素
-            const canvasElement = parentElement.querySelector("canvas");
-            if (canvasElement) {
-                parentElement.removeChild(canvasElement);
-            }
+  // 第三步：外層 col-12 包住按鈕
+  const colDiv = document.createElement('div');
+  colDiv.className = 'col-12';
+  colDiv.appendChild(a);
  
-            // 創建一個新的 <img> 元素
-            const imgElement = document.createElement("img");
-            imgElement.src = imageURL;
- 
-            // 替換 #canvas_div_lurl 元素為新的 <img> 元素
-            const canvasDivLurlElement = document.querySelector("#canvas_div_lurl");
-            if (canvasDivLurlElement) {
-                canvasDivLurlElement.parentNode.replaceChild(imgElement, canvasDivLurlElement);
-            } else {
-                console.error("#canvas_div_lurl element not found.");
-            }
-        } else {
-            console.error("Image URL not found in script text.");
-        }
-    } else {
-        console.error("There are not enough script elements in the parent element.");
-    }
+  // 第四步：插入到指定的 row 容器中
+  const targetRow = document.querySelector('div.row[style*="margin: 10px"][style*="border-style:solid"]');
+  if (targetRow) {
+    targetRow.appendChild(colDiv);
+  } else {
+    console.warn('找不到指定的 <div class="row"> 元素');
+  }
 } else {
-    console.error("Parent element not found.");
+  console.warn('找不到 preload image 的 <link> 元素');
 }
  
  
@@ -478,9 +480,8 @@ function getCookieNameFromURL() {
  
 function tryToday(){
  
- 
 // 获取包含日期信息的文本
-var dateText = document.querySelector("#form_password > div:nth-child(9) > div > span").textContent;
+var dateText = document.querySelectorAll(".login_span")[1].textContent;
  
 // 使用正则表达式匹配日期部分（yyyy-mm-dd hh:mm:ss）
 var datePattern = /(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/;
